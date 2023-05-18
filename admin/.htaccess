@@ -1,0 +1,7 @@
+RewriteEngine On
+
+RewriteRule ^$ loadAdmin.php?page=login [NC,QSA,B,L,NE]
+
+RewriteCond %{REQUEST_URI} !=loadAdmin.php [NC]
+
+RewriteRule ^(.*)$ loadAdmin.php?page=$1 [NC,QSA,B,L,NE]
