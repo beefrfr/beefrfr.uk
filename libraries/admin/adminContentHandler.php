@@ -46,6 +46,18 @@
 					Array(
 						"name" => "Main",
 						"url" => "main"
+					),
+					Array(
+						"name" => "Pages",
+						"url" => "pages"
+					),
+					Array(
+						"name" => "Settings",
+						"url" => "settings"
+					),
+					Array(
+						"name" => "Analytics",
+						"url" => "analytics"
 					)
 				);
 				$navBar = "";
