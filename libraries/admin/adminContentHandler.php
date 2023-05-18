@@ -11,7 +11,10 @@
 				"handleLogin" => "loginHandler.php",
 				"logout" => "logout.php"
 			);
-			$this->user = new User();
+		}
+
+		protected function getUser() {
+			$this->user = new User("admin_users");
 		}
 
 		public function getPage($pageUrl) {
