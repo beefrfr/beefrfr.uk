@@ -8,12 +8,19 @@
 		public $template;
 		public $navTemplate;
 
+		protected $user;
+
 		public function __construct() {
 			$this->db = DB::getInstance();
 			$this->loadTemplates();
 			$this->parsedown = new Parsedown();
 			$this->parsedown->setBreaksEnabled(true);
 			$this->parsedown->setSafeMode(true);
+			$this->getUser();
+		}
+
+		protected function getUser() {
+			$this->user = new User("users");
 		}
 
 		protected function loadTemplates() {
