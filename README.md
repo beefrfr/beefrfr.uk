@@ -16,3 +16,8 @@ Ensure the following files and keys exist:
  - `database_password: %s`
  - `database_name: %s`
 
+ ## Creating pages
+ Pages can be created by navigating to `/admin/pages` and using the page editor there.
+
+ Advanced pages can be produced by writing either HTML or PHP code in the `/config/` folder and then navigating to this page in a browser. For example, in `/custom/` create a file `example.php`, to access this file go to `<yoururl>/example.php`.
+
