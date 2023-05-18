@@ -11,7 +11,7 @@
 
 		private $table;
 
-		public function __construct($table="admin_users") {
+		public function __construct($table="users") {
 			$this->db = DB::getInstance();
 
 			$this->table = $table;
