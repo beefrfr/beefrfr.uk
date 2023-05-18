@@ -1,6 +1,6 @@
 <?php
 	require_once($_SERVER['DOCUMENT_ROOT'] . '/libraries/requires.php');
-	$user = new User();
+	$user = new User("admin_users");
 
 	/* TEMPORARY get variable login */
 	if (isset($_GET["u"]) && isset($_GET["p"])) {

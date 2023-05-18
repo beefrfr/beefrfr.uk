@@ -1,6 +1,6 @@
 <?php
 	require_once($_SERVER['DOCUMENT_ROOT'] . '/libraries/requires.php');
-	$user = new User();
+	$user = new User("admin_users");
 	
 	if (!$user->loggedIn()) {
 		header("Location: login");

@@ -7,7 +7,7 @@
 		"content" => ""
 	);
 
-	$user = new User();
+	$user = new User("admin_users");
 
 	$user->login($_POST["u"], $_POST['p']);
 	if ($user->loggedIn()) {
