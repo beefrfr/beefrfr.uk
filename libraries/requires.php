@@ -4,8 +4,7 @@
 	}
 	require_once($_SERVER['DOCUMENT_ROOT'] . '/vendor/autoload.php');
 	require_once($_SERVER['DOCUMENT_ROOT'] . '/libraries/db.php');
-	require_once($_SERVER['DOCUMENT_ROOT'] . '/libraries/admin/user.php');
+	require_once($_SERVER['DOCUMENT_ROOT'] . '/libraries/user.php');
 	require_once($_SERVER['DOCUMENT_ROOT'] . '/libraries/admin/adminContentHandler.php');
 	require_once($_SERVER['DOCUMENT_ROOT'] . '/libraries/contentHandler.php');
-	require_once($_SERVER['DOCUMENT_ROOT'] . '/libraries/admin/user.php');
 ?>
