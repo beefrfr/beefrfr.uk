@@ -27,7 +27,12 @@
 				"content" => "The content failed to load"
 			);
 			if (array_key_exists($pageUrl, $this->adminPages)) {
-				include $this->adminPages[$pageUrl];
+				$pageAbsolutePath = $_SERVER['DOCUMENT_ROOT'] . "/admin/" . $this->adminPages[$pageUrl];
+				if (file_exists($pageAbsolutePath)) {
+					include $pageAbsolutePath;
+				} else {
+					header("Location: login");
+				}
 			} else {
 				header("Location: login");
 			}
