@@ -1,0 +1,7 @@
+RewriteEngine On
+
+RewriteRule ^$ loadImages.php [NC,QSA,B,L,NE]
+
+RewriteCond %{REQUEST_URI} !=loadImages.php [NC]
+
+RewriteRule ^(.*)$ loadImages.php?id=$1 [NC,QSA,B,L,NE]
