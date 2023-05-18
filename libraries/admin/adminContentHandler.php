@@ -37,7 +37,7 @@
 				$websiteTitle = $page["pageTitle"];
 			}
 
-			return $this->prepareTemplate($page["tabTitle"], $websiteTitle, $navBar, $settings, $page["content"]);
+			return $this->prepareTemplate("/admin", $page["tabTitle"], $websiteTitle, $navBar, $settings, $page["content"]);
 		}
 
 		public function generateNavBar($pageUrl) {
