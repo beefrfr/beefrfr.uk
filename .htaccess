@@ -1,0 +1,7 @@
+RewriteEngine On
+
+RewriteRule ^$ /loadPage.php?page=home [NC,QSA,B,L,NE]
+
+RewriteCond %{REQUEST_URI} !=/loadPage.php [NC]
+
+RewriteRule ^([^.]*) /loadPage.php?page=$1 [NC,QSA,B,L,NE]
