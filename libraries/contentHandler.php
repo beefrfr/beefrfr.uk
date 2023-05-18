@@ -127,8 +127,19 @@
 		public function getPage($pageUrl) {
 			$settings = $this->getSettings();
 			$navBar = $this->generateNavBar($pageUrl);
-			$page = $this->loadPage($pageUrl);
-
+			$page = Array(
+				"tabTitle" => "Unknown Page",
+				"pageTitle" => "",
+				"content" => ""
+			);
+			$pageAbsolutePath = $_SERVER['DOCUMENT_ROOT'] . "/custom/" . $pageUrl;
+			if (file_exists($pageAbsolutePath . ".php")) {
+				include $pageAbsolutePath . ".php";
+			} else if (file_exists($pageAbsolutePath . ".html")) {
+				$page["content"] = file_get_contents($pageAbsolutePath . ".html");
+			} else {
+				$page = $this->loadPage($pageUrl);
+			}
 			$websiteTitle = $settings["websitetitle"];
 			if ($page["pageTitle"] != "") {
 				$websiteTitle = $page["pageTitle"];
