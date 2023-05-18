@@ -10,7 +10,7 @@
 
 ## Config
 Ensure the following files and keys exist:
-1. `/config/db.yaml`:
+1. `/config/db.yml`:
  - `database_host: %s`
  - `database_username: %s`
  - `database_password: %s`
