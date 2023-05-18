@@ -15,32 +15,55 @@
 			$this->db = DB::getInstance();
 
 			$this->table = $table;
-			if (!($this->db->connected() && isset($_SESSION["_loggedinuserid"]) && isset($_SESSION["_loggedinhash"]) && isset($_SESSION["_loggedin"]))) {
+			if (!($this->db->connected() && $this->issetSession("loggedinuserid") && $this->issetSession("loggedinhash") && $this->issetSession("loggedin"))) {
 				$this->logout();
 			} else {
 				$this->loggedIn = $this->checkLogin();
 			}
 		}
 
-		function loggedIn() {
+		public function issetSession($id) {
+			$sessionID = $this->table . $id;
+			return isset($_SESSION[$sessionID]);
+		}
+
+		public function getSession($id) {
+			$sessionID = $this->table . $id;
+			if (!isset($_SESSION[$sessionID])) {
+				return false;
+			}
+			return $_SESSION[$sessionID];
+		}
+
+		private function setSession($id, $value) {
+			$sessionID = $this->table . $id;
+			$_SESSION[$sessionID] = $value;
+		}
+
+		private function unsetSession($id) {
+			$sessionID = $this->table . $id;
+			unset($_SESSION[$sessionID]);
+		}
+
+		public function loggedIn() {
 			return $this->loggedIn;
 		}
 
 		public function logout() {
-			unset($_SESSION["_loggedinuserid"]);
-			unset($_SESSION["_loggedinhash"]);
-			unset($_SESSION["_loggedin"]);
+			$this->unsetSession("loggedinuserid");
+			$this->unsetSession("loggedinhash");
+			$this->unsetSession("loggedin");
 			$this->user = NULL;
 			$this->loggedIn = false;
 		}
 
 		public function checkLogin() {
-			$checkHash = hash("sha512", $_SERVER['REMOTE_ADDR'] . $_SESSION["_loggedinuserid"]);
-			if ($checkHash != $_SESSION["_loggedinhash"]) {
+			$checkHash = hash("sha512", $_SERVER['REMOTE_ADDR'] . $this->getSession("loggedinuserid"));
+			if ($checkHash != $this->getSession("loggedinhash")) {
 				$this->logout();
 				return false;
 			}
-			$userResult = $this->db->query("SELECT * FROM `" . $this->table . "` WHERE `id` = ?", [$_SESSION["_loggedinuserid"]]);
+			$userResult = $this->db->query("SELECT * FROM `" . $this->table . "` WHERE `id` = ?", [$this->getSession("loggedinuserid")]);
 			if ($userResult == false) {
 				$this->logout();
 				return false;
@@ -65,9 +88,9 @@
 				if ($user["password"] == hash("sha512", $password . $user["salt"])) {
 					$this->user = $user;
 					$this->loggedIn = true;
-					$_SESSION["_loggedinuserid"] = $user["id"];
-					$_SESSION["_loggedinhash"] = hash("sha512", $_SERVER['REMOTE_ADDR'] . $user["id"]);
-					$_SESSION["_loggedin"] = true;
+					$this->setSession("loggedinuserid", $user["id"]);
+					$this->setSession("loggedinhash", hash("sha512", $_SERVER['REMOTE_ADDR'] . $user["id"]));
+					$this->setSession("loggedin", true);
 					return true;
 				}
 			}
