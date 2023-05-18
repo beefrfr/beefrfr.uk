@@ -9,7 +9,10 @@
 				"main" => "main.php",
 				"login" => "login.php",
 				"handleLogin" => "loginHandler.php",
-				"logout" => "logout.php"
+				"logout" => "logout.php",
+				"pages" => "pages.php",
+				"settings" => "settings.php",
+				"analytics" => "analytics.php"
 			);
 		}
 
