@@ -40,20 +40,22 @@
 			return $setting['value'];
 		}
 
-		protected function getSettings() {
+		public function getSettings() {
 			$navbarsticky = $this->getSetting("navbarsticky") == '1' ? "sticky-top" : "";
 			$darkmode = $this->getSetting("darkmode") == '1';
 			$navbardark = $darkmode ? "navbar-dark bg-dark" : "navbar-light bg-primary";
 			$backgroundcolor = $darkmode ? "333" : "ddd";
 			$textcolor = $darkmode ? "fff" : "111";
 			$websitetitle = $this->getSetting("websitetitle");
+			$rootpage = $this->getSetting("rootpage");
 			return Array(
 				"navbarsticky" => $navbarsticky,
 				"darkmode" => $darkmode,
 				"navbardark" => $navbardark,
 				"backgroundcolor" => $backgroundcolor,
 				"textcolor" => $textcolor,
-				"websitetitle" => $websitetitle
+				"websitetitle" => $websitetitle,
+				"rootpage" => $rootpage
 			);
 		}
 
@@ -132,11 +134,12 @@
 				$websiteTitle = $page["pageTitle"];
 			}
 
-			return $this->prepareTemplate($page["tabTitle"], $websiteTitle, $navBar, $settings, $page["content"]);
+			return $this->prepareTemplate($settings["rootpage"], $page["tabTitle"], $websiteTitle, $navBar, $settings, $page["content"]);
 		}
 
-		protected function prepareTemplate($tabTitle, $websiteTitle, $navBar, $settings, $content) {
+		protected function prepareTemplate($websiteRoot, $tabTitle, $websiteTitle, $navBar, $settings, $content) {
 			$template = $this->template;
+			$template = str_replace('$websiteRoot', $websiteRoot, $template);
 			$template = str_replace('$tabTitle', $tabTitle, $template);
 			$template = str_replace('$websiteTitle', $websiteTitle, $template);
 			$template = str_replace('$menuItems', $navBar, $template);
