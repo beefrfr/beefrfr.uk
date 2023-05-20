@@ -76,12 +76,12 @@
 						$active = "active";
 						$current = '<span class="sr-only">(current)</span>';
 					}
-					$currentNav = $this->navTemplate;
-					$currentNav = str_replace('$link', $navItem['url'], $currentNav);
-					$currentNav = str_replace('$name', $navItem['name'], $currentNav);
-					$currentNav = str_replace('$current', $current, $currentNav);
-					$currentNav = str_replace('$active', $active, $currentNav);
-					$navBar .= $currentNav;
+					$navBar .= $this->navTemplate->prepare([
+						["key" => '$link', "value" => $navItem['url']],
+						["key" => '$name', "value" => $navItem['name']],
+						["key" => '$current', "value" => $current],
+						["key" => '$active', "value" => $active]
+					]);
 				}
 				return $navBar;
 			} else {
