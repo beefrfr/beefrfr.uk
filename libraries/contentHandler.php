@@ -1,6 +1,7 @@
 <?php
 	require_once($_SERVER['DOCUMENT_ROOT'] . '/vendor/autoload.php');
 	require_once($_SERVER['DOCUMENT_ROOT'] . '/libraries/db.php');
+	require_once($_SERVER['DOCUMENT_ROOT'] . '/libraries/templateHandler.php');
 	
 	class ContentHandler {
 		protected $db;
@@ -24,8 +25,8 @@
 		}
 
 		protected function loadTemplates() {
-			$this->template = file_get_contents($_SERVER['DOCUMENT_ROOT'] . '/templates/template.html');
-			$this->navTemplate = file_get_contents($_SERVER['DOCUMENT_ROOT'] . '/templates/navtemplate.html');
+			$this->template = new TemplateHandler($_SERVER['DOCUMENT_ROOT'] . '/templates/template.html');
+			$this->navTemplate = new TemplateHandler($_SERVER['DOCUMENT_ROOT'] . '/templates/navtemplate.html');
 		}
 
 		protected function getSetting($setting) {
@@ -72,12 +73,12 @@
 					$active = "active";
 					$current = '<span class="sr-only">(current)</span>';
 				}
-				$currentNav = $this->navTemplate;
-				$currentNav = str_replace('$link', $nav['url'], $currentNav);
-				$currentNav = str_replace('$name', $nav['name'], $currentNav);
-				$currentNav = str_replace('$current', $current, $currentNav);
-				$currentNav = str_replace('$active', $active, $currentNav);
-				$navBar .= $currentNav;
+				$navBar .= $this->navTemplate->prepare([
+					["key" => '$link', "value" => $nav['url']],
+					["key" => '$name', "value" => $nav['name']],
+					["key" => '$current', "value" => $current],
+					["key" => '$active', "value" => $active]
+				]);
 			}
 			return $navBar;
 		}
@@ -149,17 +150,17 @@
 		}
 
 		protected function prepareTemplate($websiteRoot, $tabTitle, $websiteTitle, $navBar, $settings, $content) {
-			$template = $this->template;
-			$template = str_replace('$websiteRoot', $websiteRoot, $template);
-			$template = str_replace('$tabTitle', $tabTitle, $template);
-			$template = str_replace('$websiteTitle', $websiteTitle, $template);
-			$template = str_replace('$menuItems', $navBar, $template);
-			$template = str_replace('$navbarsticky', $settings["navbarsticky"], $template);
-			$template = str_replace('$navbardark', $settings["navbardark"], $template);
-			$template = str_replace('$backgroundcolor', $settings["backgroundcolor"], $template);
-			$template = str_replace('$textcolor', $settings["textcolor"], $template);
-			$template = str_replace('$content', $content, $template);
-			return $template;
+			return $this->template->prepare([
+				["key" => '$websiteRoot', "value" => $websiteRoot],
+				["key" => '$tabTitle', "value" => $tabTitle],
+				["key" => '$websiteTitle', "value" => $websiteTitle],
+				["key" => '$menuItems', "value" => $navBar],
+				["key" => '$navbarsticky', "value" => $settings["navbarsticky"]],
+				["key" => '$navbardark', "value" => $settings["navbardark"]],
+				["key" => '$backgroundcolor', "value" => $settings["backgroundcolor"]],
+				["key" => '$textcolor', "value" => $settings["textcolor"]],
+				["key" => '$content', "value" => $content]
+			]);
 		}
 	}
 ?>
