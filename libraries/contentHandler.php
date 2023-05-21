@@ -25,8 +25,8 @@
 		}
 
 		protected function loadTemplates() {
-			$this->template = new TemplateHandler($_SERVER['DOCUMENT_ROOT'] . '/templates/template.html');
-			$this->navTemplate = new TemplateHandler($_SERVER['DOCUMENT_ROOT'] . '/templates/navtemplate.html');
+			$this->template = new TemplateHandler('/templates/template.html');
+			$this->navTemplate = new TemplateHandler('/templates/navtemplate.html');
 		}
 
 		protected function getSetting($setting) {
