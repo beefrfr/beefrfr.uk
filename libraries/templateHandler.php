@@ -5,6 +5,9 @@
 
 		public function __construct($templatePath) {
 			$this->template = "";
+			if (substr($templatePath, 0, 1) === "/") {
+				$templatePath = $_SERVER['DOCUMENT_ROOT'] . $templatePath;
+			}
 			if (file_exists($templatePath)) {
 				$this->template = file_get_contents($templatePath);
 			}
