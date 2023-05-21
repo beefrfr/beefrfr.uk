@@ -16,10 +16,10 @@
 			$dbCredentials = Yaml::parse($dbYaml);
 			$dbKeys = ['database_host', 'database_username', 'database_password', 'database_name'];
 			if (count(array_diff($dbKeys, array_keys($dbCredentials))) == 0) {
-				$this->host	= $dbCredentials["database_location"];
-				$this->db	= $dbCredentials["database_name"];
-				$this->username	= $dbCredentials["database_username"];
-				$this->password	= $dbCredentials["database_password"];
+				$this->host	= $dbCredentials['database_location'];
+				$this->db	= $dbCredentials['database_name'];
+				$this->username	= $dbCredentials['database_username'];
+				$this->password	= $dbCredentials['database_password'];
 				$this->connect();
 			}
 		}
@@ -59,7 +59,7 @@
 			$statement = $this->connection->prepare($sql);
 			if (!$this->connected()) {
 				if ($this->dieOnError) {
-					die("DB not connected");
+					die('DB not connected');
 				}
 				return false;
 			} else if (!$statement) {

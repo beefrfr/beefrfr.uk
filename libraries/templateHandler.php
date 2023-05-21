@@ -4,8 +4,8 @@
 		private $template;
 
 		public function __construct($templatePath) {
-			$this->template = "";
-			if (substr($templatePath, 0, 1) === "/") {
+			$this->template = '';
+			if (substr($templatePath, 0, 1) === '/') {
 				$templatePath = $_SERVER['DOCUMENT_ROOT'] . $templatePath;
 			}
 			if (file_exists($templatePath)) {
@@ -16,7 +16,7 @@
 		public function prepare($values) {
 			$template = $this->template;
 			foreach ($values as $value) {
-				$template = str_replace($value["key"], $value["value"], $template);
+				$template = str_replace($value['key'], $value['value'], $template);
 			}
 			return $template;
 		}

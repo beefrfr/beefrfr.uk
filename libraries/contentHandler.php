@@ -21,7 +21,7 @@
 		}
 
 		protected function getUser() {
-			$this->user = new User("users");
+			$this->user = new User('users');
 		}
 
 		protected function loadTemplates() {
@@ -42,21 +42,21 @@
 		}
 
 		public function getSettings() {
-			$navbarsticky = $this->getSetting("navbarsticky") == '1' ? "sticky-top" : "";
-			$darkmode = $this->getSetting("darkmode") == '1';
-			$navbardark = $darkmode ? "navbar-dark bg-dark" : "navbar-light bg-primary";
-			$backgroundcolor = $darkmode ? "333" : "ddd";
-			$textcolor = $darkmode ? "fff" : "111";
-			$websitetitle = $this->getSetting("websitetitle");
-			$rootpage = $this->getSetting("rootpage");
+			$navbarsticky = $this->getSetting('navbarsticky') == '1' ? 'sticky-top' : '';
+			$darkmode = $this->getSetting('darkmode') == '1';
+			$navbardark = $darkmode ? 'navbar-dark bg-dark' : 'navbar-light bg-primary';
+			$backgroundcolor = $darkmode ? '333' : 'ddd';
+			$textcolor = $darkmode ? 'fff' : '111';
+			$websitetitle = $this->getSetting('websitetitle');
+			$rootpage = $this->getSetting('rootpage');
 			return Array(
-				"navbarsticky" => $navbarsticky,
-				"darkmode" => $darkmode,
-				"navbardark" => $navbardark,
-				"backgroundcolor" => $backgroundcolor,
-				"textcolor" => $textcolor,
-				"websitetitle" => $websitetitle,
-				"rootpage" => $rootpage
+				'navbarsticky' => $navbarsticky,
+				'darkmode' => $darkmode,
+				'navbardark' => $navbardark,
+				'backgroundcolor' => $backgroundcolor,
+				'textcolor' => $textcolor,
+				'websitetitle' => $websitetitle,
+				'rootpage' => $rootpage
 			);
 		}
 
@@ -64,20 +64,20 @@
 			if (!$this->db->connected()) {
 				return false;
 			}
-			$navBar = "";
+			$navBar = '';
 			$navResult = $this->db->query("SELECT * FROM `navbar` WHERE `visible`='1' ORDER BY `navOrder` ASC");
 			while ($nav = $navResult->fetch_assoc()) {
-				$active = "";
-				$current = "";
+				$active = '';
+				$current = '';
 				if (strtolower($nav['url']) == $pageUrl) {
-					$active = "active";
+					$active = 'active';
 					$current = '<span class="sr-only">(current)</span>';
 				}
 				$navBar .= $this->navTemplate->prepare([
-					["key" => '$link', "value" => $nav['url']],
-					["key" => '$name', "value" => $nav['name']],
-					["key" => '$current', "value" => $current],
-					["key" => '$active', "value" => $active]
+					['key' => '$link', 'value' => $nav['url']],
+					['key' => '$name', 'value' => $nav['name']],
+					['key' => '$current', 'value' => $current],
+					['key' => '$active', 'value' => $active]
 				]);
 			}
 			return $navBar;
@@ -85,40 +85,40 @@
 
 		protected function loadPage($pageUrl) {
 			$page = Array(
-				"tabTitle" => "Unknown Page",
-				"pageTitle" => "",
-				"content" => ""
+				'tabTitle' => 'Unknown Page',
+				'pageTitle' => '',
+				'content' => ''
 			);
 			if (!$this->db->connected()) {
-				$page["content"] = "Unknown page - " . $pageUrl;
+				$page['content'] = 'Unknown page - ' . $pageUrl;
 				return $page;
 			}
 			$pagesResult = $this->db->query("SELECT * FROM `pages` WHERE `url` = ?", [$pageUrl]);
 			if ($pagesResult->num_rows != 1) {
-				$page["content"] = "Unknown page - " . $pageUrl;
+				$page['content'] = 'Unknown page - ' . $pageUrl;
 				return $page;
 			}
 
 			while ($pageData = $pagesResult->fetch_assoc()) {
-				$page["pageTitle"] = $pageData["pageTitle"];
-				$page["tabTitle"] = $pageData["tabTitle"];
+				$page['pageTitle'] = $pageData['pageTitle'];
+				$page['tabTitle'] = $pageData['tabTitle'];
 
 				$contentResult = $this->db->query("SELECT * FROM `content` WHERE `page` = ? ORDER BY `contentOrder` ASC", [$pageData['id']]);
 				while ($content = $contentResult->fetch_assoc()) {
-					$currentContent = "";
-					if ($content['contentType'] == "markdown") {
-						$currentContent .= sprintf("%s", $this->parsedown->text($content['content']));
-					} else if ($content['contentType'] == "html") {
-						$currentContent .= sprintf("%s", $content['content']);
-					} else if ($content['contentType'] == "image") {
-						if ($content['imageWidthType'] == "col") {
-							$currentContent .= sprintf("<div class='row'><img src='%s' alt='%s' style='height:auto !important;' class='col-%s'></div>", $content['content'], $content['imgAltText'], $content['imageWidth']);
-						} else if ($content['imageWidthType'] == "pixels") {
-							$currentContent .= sprintf("<div class='row'><img src='%s' alt='%s' style='height:auto !important;width: %spx'></div>", $content['content'], $content['imgAltText'], $content['imageWidth']);
+					$currentContent = '';
+					if ($content['contentType'] == 'markdown') {
+						$currentContent .= sprintf('%s', $this->parsedown->text($content['content']));
+					} else if ($content['contentType'] == 'html') {
+						$currentContent .= sprintf('%s', $content['content']);
+					} else if ($content['contentType'] == 'image') {
+						if ($content['imageWidthType'] == 'col') {
+							$currentContent .= sprintf('<div class="row"><img src="%s" alt="%s" style="height:auto !important;" class="col-%s"></div>', $content['content'], $content['imgAltText'], $content['imageWidth']);
+						} else if ($content['imageWidthType'] == 'pixels') {
+							$currentContent .= sprintf('<div class="row"><img src="%s" alt="%s" style="height:auto !important;width: %spx"></div>', $content['content'], $content['imgAltText'], $content['imageWidth']);
 						}
 					}
 
-					$page["content"] .= sprintf("<div id='%s' class='col-%s col-md-%s col-lg-%s'>%s&nbsp;</div>", $content['name'], $content['smallWidth'], $content['mediumWidth'], $content['largeWidth'], $currentContent);
+					$page['content'] .= sprintf('<div id="%s" class="col-%s col-md-%s col-lg-%s">%s&nbsp;</div>', $content['name'], $content['smallWidth'], $content['mediumWidth'], $content['largeWidth'], $currentContent);
 				}
 				
 			}
@@ -129,37 +129,37 @@
 			$settings = $this->getSettings();
 			$navBar = $this->generateNavBar($pageUrl);
 			$page = Array(
-				"tabTitle" => "Unknown Page",
-				"pageTitle" => "",
-				"content" => ""
+				'tabTitle' => 'Unknown Page',
+				'pageTitle' => '',
+				'content' => ''
 			);
-			$pageAbsolutePath = $_SERVER['DOCUMENT_ROOT'] . "/custom/" . $pageUrl;
-			if (file_exists($pageAbsolutePath . ".php")) {
-				include $pageAbsolutePath . ".php";
-			} else if (file_exists($pageAbsolutePath . ".html")) {
-				$page["content"] = file_get_contents($pageAbsolutePath . ".html");
+			$pageAbsolutePath = $_SERVER['DOCUMENT_ROOT'] . '/custom/' . $pageUrl;
+			if (file_exists($pageAbsolutePath . '.php')) {
+				include $pageAbsolutePath . '.php';
+			} else if (file_exists($pageAbsolutePath . '.html')) {
+				$page['content'] = file_get_contents($pageAbsolutePath . '.html');
 			} else {
 				$page = $this->loadPage($pageUrl);
 			}
-			$websiteTitle = $settings["websitetitle"];
-			if ($page["pageTitle"] != "") {
-				$websiteTitle = $page["pageTitle"];
+			$websiteTitle = $settings['websitetitle'];
+			if ($page['pageTitle'] != '') {
+				$websiteTitle = $page['pageTitle'];
 			}
 
-			return $this->prepareTemplate($settings["rootpage"], $page["tabTitle"], $websiteTitle, $navBar, $settings, $page["content"]);
+			return $this->prepareTemplate($settings['rootpage'], $page['tabTitle'], $websiteTitle, $navBar, $settings, $page['content']);
 		}
 
 		protected function prepareTemplate($websiteRoot, $tabTitle, $websiteTitle, $navBar, $settings, $content) {
 			return $this->template->prepare([
-				["key" => '$websiteRoot', "value" => $websiteRoot],
-				["key" => '$tabTitle', "value" => $tabTitle],
-				["key" => '$websiteTitle', "value" => $websiteTitle],
-				["key" => '$menuItems', "value" => $navBar],
-				["key" => '$navbarsticky', "value" => $settings["navbarsticky"]],
-				["key" => '$navbardark', "value" => $settings["navbardark"]],
-				["key" => '$backgroundcolor', "value" => $settings["backgroundcolor"]],
-				["key" => '$textcolor', "value" => $settings["textcolor"]],
-				["key" => '$content', "value" => $content]
+				['key' => '$websiteRoot', 'value' => $websiteRoot],
+				['key' => '$tabTitle', 'value' => $tabTitle],
+				['key' => '$websiteTitle', 'value' => $websiteTitle],
+				['key' => '$menuItems', 'value' => $navBar],
+				['key' => '$navbarsticky', 'value' => $settings['navbarsticky']],
+				['key' => '$navbardark', 'value' => $settings['navbardark']],
+				['key' => '$backgroundcolor', 'value' => $settings['backgroundcolor']],
+				['key' => '$textcolor', 'value' => $settings['textcolor']],
+				['key' => '$content', 'value' => $content]
 			]);
 		}
 	}

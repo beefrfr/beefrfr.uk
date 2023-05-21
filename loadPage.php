@@ -5,8 +5,8 @@
 
 	$contentHandler = new ContentHandler();
 
-	if ($page == "__index__") {
-		$page = $contentHandler->getSettings()["rootpage"];
+	if ($page == '__index__') {
+		$page = $contentHandler->getSettings()['rootpage'];
 	}
 
 	echo $contentHandler->getPage($page);
