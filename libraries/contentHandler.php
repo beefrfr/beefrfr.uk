@@ -27,6 +27,7 @@
 		protected function loadTemplates() {
 			$this->template = new TemplateHandler('/templates/template.html');
 			$this->navTemplate = new TemplateHandler('/templates/navtemplate.html');
+			$this->navItemTemplate = new TemplateHandler('/templates/navitemtemplate.html');
 		}
 
 		protected function getSetting($setting) {
@@ -60,7 +61,7 @@
 			);
 		}
 
-		protected function generateNavBar($pageUrl) {
+		protected function generateNavBar($pageUrl, $websiteTitle) {
 			if (!$this->db->connected()) {
 				return false;
 			}
@@ -73,14 +74,20 @@
 					$active = 'active';
 					$current = '<span class="sr-only">(current)</span>';
 				}
-				$navBar .= $this->navTemplate->prepare([
+				$navBar .= $this->navItemTemplate->prepare([
 					['key' => '$link', 'value' => $nav['url']],
 					['key' => '$name', 'value' => $nav['name']],
 					['key' => '$current', 'value' => $current],
 					['key' => '$active', 'value' => $active]
 				]);
 			}
-			return $navBar;
+			if ($navBar != '') {
+				return $this->navTemplate->prepare([
+					['key' => '$menuItems', 'value' => $navBar],
+					['key' => '$websiteTitle', 'value' => $websiteTitle]
+				]);
+			}
+			return '';
 		}
 
 		protected function loadPage($pageUrl) {
@@ -127,11 +134,11 @@
 
 		public function getPage($pageUrl) {
 			$settings = $this->getSettings();
-			$navBar = $this->generateNavBar($pageUrl);
 			$page = Array(
 				'tabTitle' => 'Unknown Page',
 				'pageTitle' => '',
-				'content' => ''
+				'content' => '',
+				'navbar' => true
 			);
 			$pageAbsolutePath = $_SERVER['DOCUMENT_ROOT'] . '/custom/' . $pageUrl;
 			if (file_exists($pageAbsolutePath . '.php')) {
@@ -145,16 +152,19 @@
 			if ($page['pageTitle'] != '') {
 				$websiteTitle = $page['pageTitle'];
 			}
+			$navBar = '';
+			if ($page['navbar']) {
+				$navBar = $this->generateNavBar($pageUrl, $websiteTitle);
+			}
 
-			return $this->prepareTemplate($settings['rootpage'], $page['tabTitle'], $websiteTitle, $navBar, $settings, $page['content']);
+			return $this->prepareTemplate($settings['rootpage'], $page['tabTitle'], $navBar, $settings, $page['content']);
 		}
 
-		protected function prepareTemplate($websiteRoot, $tabTitle, $websiteTitle, $navBar, $settings, $content) {
+		protected function prepareTemplate($websiteRoot, $tabTitle, $navBar, $settings, $content) {
 			return $this->template->prepare([
 				['key' => '$websiteRoot', 'value' => $websiteRoot],
 				['key' => '$tabTitle', 'value' => $tabTitle],
-				['key' => '$websiteTitle', 'value' => $websiteTitle],
-				['key' => '$menuItems', 'value' => $navBar],
+				['key' => '$navBar', 'value' => $navBar],
 				['key' => '$navbarsticky', 'value' => $settings['navbarsticky']],
 				['key' => '$navbardark', 'value' => $settings['navbardark']],
 				['key' => '$backgroundcolor', 'value' => $settings['backgroundcolor']],
