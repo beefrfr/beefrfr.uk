@@ -38,17 +38,17 @@
 			}
 
 			$settings = $this->getSettings();
-			$navBar = $this->generateNavBar($pageUrl);
 
 			$websiteTitle = 'Admin';
 			if ($page['pageTitle'] != '') {
 				$websiteTitle = $page['pageTitle'];
 			}
+			$navBar = $this->generateNavBar($pageUrl, $websiteTitle);
 
-			return $this->prepareTemplate('/admin', $page['tabTitle'], $websiteTitle, $navBar, $settings, $page['content']);
+			return $this->prepareTemplate('/admin', $page['tabTitle'], $navBar, $settings, $page['content']);
 		}
 
-		public function generateNavBar($pageUrl) {
+		public function generateNavBar($pageUrl, $websiteTitle) {
 			if ($this->user->loggedIn()) {
 				$nav = Array(
 					Array(
@@ -76,16 +76,22 @@
 						$active = 'active';
 						$current = '<span class="sr-only">(current)</span>';
 					}
-					$navBar .= $this->navTemplate->prepare([
+					$navBar .= $this->navItemTemplate->prepare([
 						['key' => '$link', 'value' => $navItem['url']],
 						['key' => '$name', 'value' => $navItem['name']],
 						['key' => '$current', 'value' => $current],
 						['key' => '$active', 'value' => $active]
 					]);
 				}
-				return $navBar;
+				return $this->navTemplate->prepare([
+					['key' => '$menuItems', 'value' => $navBar],
+					['key' => '$websiteTitle', 'value' => $websiteTitle]
+				]);
 			} else {
-				return '';
+				return $this->navTemplate->prepare([
+					['key' => '$menuItems', 'value' => ''],
+					['key' => '$websiteTitle', 'value' => $websiteTitle]
+				]);
 			}
 		}
 	}
